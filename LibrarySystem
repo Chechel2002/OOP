@@ -1,0 +1,154 @@
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Book {
+    private String title;
+    private String author;
+    private String isbn;
+    private int availableCopies;
+
+    public Book(String title, String author, String isbn, int availableCopies) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.availableCopies = availableCopies;
+    }
+
+    public boolean borrowBook() {
+        if (availableCopies > 0) {
+            availableCopies--;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void returnBook() {
+        availableCopies++;
+    }
+
+    public String getBookDetails() {
+        return "\nTitle: " + title + "\nAuthor: " + author + "\nISBN: " + isbn + "\nAvailable Copies: " + availableCopies;
+    }
+
+    public int getAvailableCopies() {
+        return availableCopies;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+}
+
+public class MainLibrary {
+    public static void main(String[] args) {
+        ArrayList<Book> bookList = new ArrayList<>();
+        bookList.add(new Book("Ang Masaklap Na Buhay ng isang Bobong Istudyante", "Rachel Nodalo", "01010101", 169));
+        bookList.add(new Book("EEEEYY", "Chel Nodalo", "02020202", 20));
+        Scanner scanner = new Scanner(System.in);
+        int option;
+
+        do {
+            System.out.println("\nLibrary Management System");
+            System.out.println("1. Borrow a Book");
+            System.out.println("2. Return a Book");
+            System.out.println("3. Book Details");
+            System.out.println("4. Available Copies");
+            System.out.println("5. Create a New Book");
+            System.out.println("0. Exit");
+            System.out.print("Choose an option: ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (option) {
+                case 1:
+                    System.out.print("Enter the title of the book to borrow: ");
+                    String borrowTitle = scanner.nextLine();
+                    boolean borrowed = false;
+
+                    for (Book book : bookList) {
+                        if (book.getTitle().equalsIgnoreCase(borrowTitle)) {
+                            if (book.borrowBook()) {
+                                System.out.println("Book borrowed successfully.");
+                            } else {
+                                System.out.println("No available copies to borrow.");
+                            }
+                            borrowed = true;
+                            break;
+                        }
+                    }
+                    if (!borrowed) {
+                        System.out.println("Book not found.");
+                    }
+                    break;
+                case 2:
+                    System.out.print("Enter the title of the book to return: ");
+                    String returnTitle = scanner.nextLine();
+                    boolean returned = false;
+
+                    for (Book book : bookList) {
+                        if (book.getTitle().equalsIgnoreCase(returnTitle)) {
+                            book.returnBook();
+                            System.out.println("Book returned successfully.");
+                            returned = true;
+                            break;
+                        }
+                    }
+                    if (!returned) {
+                        System.out.println("Book not found.");
+                    }
+                    break;
+                case 3:
+                    for (Book book : bookList) {
+                        System.out.println(book.getBookDetails());
+                    }
+                    break;
+                case 4:
+                    System.out.print("Enter the title of the book to check available copies: ");
+                    String checkTitle = scanner.nextLine();
+                    boolean found = false;
+
+                    for (Book book : bookList) {
+                        if (book.getTitle().equalsIgnoreCase(checkTitle)) {
+                            System.out.println("Available Copies: " + book.getAvailableCopies());
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("Book not found.");
+                    }
+                    break;
+                case 5:
+                    System.out.print("Enter the title of the new book: ");
+                    String newTitle = scanner.nextLine();
+                    System.out.print("Enter the author of the new book: ");
+                    String newAuthor = scanner.nextLine();
+                    System.out.print("Enter the ISBN of the new book: ");
+                    String newIsbn = scanner.nextLine();
+                    System.out.print("Enter the number of available copies: ");
+                    int newAvailableCopies = scanner.nextInt();
+                    scanner.nextLine();
+
+                    bookList.add(new Book(newTitle, newAuthor, newIsbn, newAvailableCopies));
+                    System.out.println("Book created successfully.");
+                    break;
+                case 0:
+                    System.out.println("Exiting the system.");
+                    break;
+                default:
+                    System.out.println("Not in the Options, Please try again.");
+            }
+        } while (option != 0);
+    }
+}
+
