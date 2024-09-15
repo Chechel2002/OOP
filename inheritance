@@ -1,0 +1,142 @@
+class Vehicle {
+    String brand;
+    int speed;
+    int fuel;
+    String color;
+
+    public Vehicle(String brand, int speed, int fuel, String color) {
+        this.brand = brand;
+        this.speed = speed;
+        this.fuel = fuel;
+        this.color = color;
+    }
+
+    void move() {
+        System.out.println(brand + " is moving at " + speed + " km/h.");
+    }
+
+    void stop() {
+        System.out.println(brand + " has stopped.");
+    }
+
+    void refuel(int amount) {
+        fuel += amount;
+        System.out.println(brand + " refueled by " + amount + " liters. Current fuel: " + fuel + " liters.");
+    }
+
+    void displayDetails() {
+        System.out.println("Vehicle Details:");
+        System.out.println("Brand: " + brand);
+        System.out.println("Color: " + color);
+        System.out.println("Speed: " + speed + " km/h");
+        System.out.println("Fuel: " + fuel + " liters");
+    }
+}
+
+  class Car extends Vehicle {
+      int numberOfDoors;
+      String type;
+  
+      public Car(String brand, int speed, int fuel, String color, int numberOfDoors, String type) {
+          super(brand, speed, fuel, color);
+          this.numberOfDoors = numberOfDoors;
+          this.type = type;
+      }
+  
+      void honk() {
+          System.out.println(brand + " is honking.");
+      }
+  
+      void openTrunk() {
+          System.out.println("The trunk of the " + brand + " is open.");
+      }
+  
+      @Override
+      void displayDetails() {
+          super.displayDetails();
+          System.out.println("Number of Doors: " + numberOfDoors);
+          System.out.println("Car Type: " + type);
+      }
+  }
+  
+  class Motorcycle extends Vehicle {
+      boolean hasSidecar;
+      String engineType;
+  
+      public Motorcycle(String brand, int speed, int fuel, String color, boolean hasSidecar, String engineType) {
+          super(brand, speed, fuel, color);
+          this.hasSidecar = hasSidecar;
+          this.engineType = engineType;
+      }
+  
+      void revEngine() {
+          System.out.println(brand + " revs its " + engineType + " engine.");
+      }
+  
+      void doWheelie() {
+          System.out.println(brand + " is doing a wheelie!");
+      }
+  
+      @Override
+      void displayDetails() {
+          super.displayDetails();
+          System.out.println("Has Sidecar: " + hasSidecar);
+          System.out.println("Engine Type: " + engineType);
+      }
+  }
+  
+  class Truck extends Vehicle {
+      int loadCapacity;
+      boolean is4WheelDrive;
+  
+      public Truck(String brand, int speed, int fuel, String color, int loadCapacity, boolean is4WheelDrive) {
+          super(brand, speed, fuel, color);
+          this.loadCapacity = loadCapacity;
+          this.is4WheelDrive = is4WheelDrive;
+      }
+  
+      void loadCargo() {
+          System.out.println("Loading cargo into the " + brand + " truck.");
+      }
+  
+      void tow() {
+          System.out.println(brand + " is towing a trailer.");
+      }
+  
+      @Override
+      void displayDetails() {
+          super.displayDetails();
+          System.out.println("Load Capacity: " + loadCapacity + " kg");
+          System.out.println("4 Wheel Drive: " + is4WheelDrive);
+      }
+  }
+
+public class Main {
+    public static void main(String[] args) {
+        Car car = new Car("BMW", 250, 60, "Blue", 4, "Sedan");
+        Motorcycle motorcycle = new Motorcycle("Ducati", 299, 16, "Grey", false, " V-twin ");
+        Truck truck = new Truck("Ford", 80, 150, "Blue", 5000, true);
+
+        car.displayDetails();
+        car.move();
+        car.honk();
+        car.openTrunk();
+        car.stop();
+        
+        System.out.println();
+        
+        motorcycle.displayDetails();
+        motorcycle.move();
+        motorcycle.revEngine();
+        motorcycle.doWheelie();
+        motorcycle.stop();
+        
+        System.out.println();
+        
+        truck.displayDetails();
+        truck.move();
+        truck.loadCargo();
+        truck.tow();
+        truck.stop();
+    }
+}
