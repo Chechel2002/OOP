@@ -1,0 +1,148 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class ContactManagementSystem {
+
+    private static final String FILE_NAME = "contacts.txt";
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("Contact Management System");
+            System.out.println("1. Add Contact");
+            System.out.println("2. View Contacts");
+            System.out.println("3. Update Contact");
+            System.out.println("4. Delete Contact");
+            System.out.println("5. Exit");
+            System.out.print("Choose an option: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addContact(scanner);
+                    break;
+                case 2:
+                    viewContacts();
+                    break;
+                case 3:
+                    updateContact(scanner);
+                    break;
+                case 4:
+                    deleteContact(scanner);
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice! Please choose again.");
+            }
+        } while (choice != 5);
+
+        scanner.close();
+    }
+
+    public static void addContact(Scanner scanner) {
+        System.out.print("Enter contact name: ");
+        String name = scanner.nextLine();
+        try (FileWriter fw = new FileWriter(FILE_NAME, true);
+             BufferedWriter bw = new BufferedWriter(fw)) {
+            bw.write(name);
+            bw.newLine();
+            System.out.println("Contact added.");
+        } catch (IOException e) {
+            System.err.println("An error occurred while adding the contact.");
+        }
+    }
+
+    public static void viewContacts() {
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            System.out.println("Contacts:");
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("No contacts found.");
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading contacts.");
+        }
+    }
+
+    public static void updateContact(Scanner scanner) {
+        System.out.print("Enter the name of the contact to update: ");
+        String oldName = scanner.nextLine();
+        System.out.print("Enter the new name: ");
+        String newName = scanner.nextLine();
+
+        List<String> contacts = new ArrayList<>();
+        boolean found = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.equals(oldName)) {
+                    contacts.add(newName);
+                    found = true;
+                } else {
+                    contacts.add(line);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading contacts.");
+        }
+
+        if (found) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME))) {
+                for (String contact : contacts) {
+                    bw.write(contact);
+                    bw.newLine();
+                }
+                System.out.println("Contact updated.");
+            } catch (IOException e) {
+                System.err.println("An error occurred while updating the contact.");
+            }
+        } else {
+            System.out.println("Contact not found.");
+        }
+    }
+
+    public static void deleteContact(Scanner scanner) {
+        System.out.print("Enter the name of the contact to delete: ");
+        String nameToDelete = scanner.nextLine();
+
+        List<String> contacts = new ArrayList<>();
+        boolean found = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (!line.equals(nameToDelete)) {
+                    contacts.add(line);
+                } else {
+                    found = true;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while reading contacts.");
+        }
+
+        if (found) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME))) {
+                for (String contact : contacts) {
+                    bw.write(contact);
+                    bw.newLine();
+                }
+                System.out.println("Contact deleted.");
+            } catch (IOException e) {
+                System.err.println("An error occurred while deleting the contact.");
+            }
+        } else {
+            System.out.println("Contact not found.");
+        }
+    }
+}
